@@ -27,3 +27,4 @@ android/.gradle/*
 android/gradle/*
 android/*.iml
 android/local.properties
+.history

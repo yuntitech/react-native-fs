@@ -581,10 +581,13 @@ RCT_EXPORT_METHOD(downloadFile:(NSDictionary *)options
   };
 
   params.progressCallback = ^(NSNumber* contentLength, NSNumber* bytesWritten) {
-    [self.bridge.eventDispatcher sendAppEventWithName:[NSString stringWithFormat:@"DownloadProgress-%@", jobId]
-                                                 body:@{@"jobId": jobId,
-                                                        @"contentLength": contentLength,
-                                                        @"bytesWritten": bytesWritten}];
+    // 解决 *** -[__NSPlaceholderDictionary initWithObjects:forKeys:count:]: attempt to insert nil object from objects[1]
+    if (jobId && contentLength && bytesWritten) {
+      [self.bridge.eventDispatcher sendAppEventWithName:[NSString stringWithFormat:@"DownloadProgress-%@", jobId]
+                                                   body:@{@"jobId": jobId,
+                                                          @"contentLength": contentLength,
+                                                          @"bytesWritten": bytesWritten}];
+    }
   };
     
     params.resumableCallback = ^() {
